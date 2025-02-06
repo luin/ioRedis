@@ -837,7 +837,7 @@ class Cluster extends Commander {
 
     duplicatedConnection.cluster(
       "SLOTS",
-      timeout((err: Error, result) => {
+      timeout((err, result) => {
         duplicatedConnection.disconnect();
         if (err) {
           return callback(err);
@@ -852,7 +852,7 @@ class Cluster extends Commander {
             result.length,
             this.status
           );
-          callback();
+          callback(null);
           return;
         }
         const nodes: RedisOptions[] = [];
@@ -910,7 +910,7 @@ class Cluster extends Commander {
         }
 
         this.connectionPool.reset(nodes);
-        callback();
+        callback(null);
       }, this.options.slotsRefreshTimeout)
     );
   }
@@ -932,7 +932,7 @@ class Cluster extends Commander {
         return callback(err);
       }
       if (typeof res !== "string") {
-        return callback();
+        return callback(null);
       }
 
       let state: string;
@@ -949,7 +949,7 @@ class Cluster extends Commander {
         debug("cluster state not ok (%s)", state);
         callback(null, state);
       } else {
-        callback();
+        callback(null);
       }
     });
   }
